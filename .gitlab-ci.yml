@@ -1,3 +1,6 @@
+services:
+    - docker
+
 build:
     stage: build
     script:
