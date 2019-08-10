@@ -25,6 +25,7 @@ RUN cd \
     && makepkg --noconfirm -si
 
 RUN yay --noconfirm -S \
+    mingw-w64-gcc-base \
     mingw-w64-cmake
 
 USER root
