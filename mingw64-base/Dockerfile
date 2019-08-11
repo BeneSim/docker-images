@@ -1,10 +1,7 @@
 FROM archlinux/base
 
-RUN echo 'MAKEFLAGS="-j$(nproc)"' >> /etc/makepkg.conf
-
 RUN pacman --noconfirm -Syy
-RUN pacman --noconfirm -S \
-    tar \
+RUN pacman --noconfirm -S tar \
     sudo \
     grep \
     binutils \
@@ -13,7 +10,12 @@ RUN pacman --noconfirm -S \
     fakeroot \
     gcc \
     awk \
-    diffutils
+    patch \
+    m4 \
+    diffutils \
+    automake \
+    autoconf \
+    which
 
 RUN useradd builduser -m \
     && passwd -d builduser \
@@ -27,16 +29,13 @@ RUN cd \
     && cd yay \
     && makepkg --noconfirm -si
 
-RUN yay --noconfirm -S \
-    mingw-w64-gcc-base
-RUN yay --noconfirm -S patch
-RUN yay --useask --noconfirm -S \
-    mingw-w64-gcc
-#    mingw-w64-gcc-crt \
-#    mingw-w64-gcc \
-#    mingw-w64-binutils \
-#    mingw-w64-headers \
-#    mingw-w64-cmake
-#
-#USER root
-#RUN userdel -r builduser
+
+RUN yay --noconfirm -S mingw-w64-binutils-bin
+RUN yay --noconfirm -S mingw-w64-headers-bin
+RUN yay --noconfirm -S mingw-w64-crt-bin
+RUN yay --noconfirm -S mingw-w64-winpthreads-bin
+RUN yay --noconfirm -S mingw-w64-gcc-bin
+RUN yay --noconfirm -S mingw-w64-cmake
+
+USER root
+RUN userdel -r builduser
